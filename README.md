@@ -1,98 +1,168 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# EventFlow Microservices Application
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A distributed event management platform built with NestJS microservices architecture.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 🏗️ Project Structure
 
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Project setup
-
-```bash
-$ pnpm install
+```
+eventflow-app/
+├── apps/
+│   ├── api-gateway/           # API Gateway service
+│   ├── auth-service/          # Authentication & authorization
+│   ├── events-service/        # Event management
+│   ├── notifications-service/ # Email notifications service
+│   └── tickets-service/       # Ticket management & check-in
+├── libs/
+│   ├── common/                # Shared DTOs, interfaces, constants
+│   ├── database/              # Database schema & utilities
+│   └── kafka/                 # Kafka messaging constants
+└── dist/                      # Compiled output
 ```
 
-## Compile and run the project
+## 🔧 Services Overview
+
+### API Gateway
+- Entry point for all client requests
+- Routes requests to appropriate microservices
+- Handles authentication middleware
+
+### Auth Service
+- User registration and login with JWT authentication
+- Password hashing with bcrypt
+- Role-based access control
+- Kafka event publishing for user actions
+
+### Events Service
+- CRUD operations for events
+- Event categorization and filtering
+- Integration with ticketing system
+
+### Tickets Service
+- Ticket purchase and management
+- Ticket validation and check-in
+- Inventory tracking
+
+### Notifications Service
+- Automated email notifications
+- Welcome emails for new users
+- Ticket purchase confirmations
+- Event cancellation notifications
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js >= 18
+- PostgreSQL database
+- Apache Kafka
+- pnpm package manager
+
+### Installation
 
 ```bash
-# development
-$ pnpm run start
+# Install dependencies
+pnpm install
 
-# watch mode
-$ pnpm run start:dev
+# Copy environment template
+cp .env.example .env
 
-# production mode
-$ pnpm run start:prod
+# Configure your environment variables in .env
+# (Database connection, Kafka settings, JWT secrets, etc.)
+
+# Run database migrations
+pnpm run db:migrate
 ```
 
-## Run tests
+### Development
 
 ```bash
-# unit tests
-$ pnpm run test
+# Start all services in development mode
+pnpm run start:dev
 
-# e2e tests
-$ pnpm run test:e2e
-
-# test coverage
-$ pnpm run test:cov
+# Or start individual services:
+pnpm --filter @app/auth-service run start:dev
+pnpm --filter @app/events-service run start:dev
+pnpm --filter @app/tickets-service run start:dev
+pnpm --filter @app/notifications-service run start:dev
+pnpm --filter @app/api-gateway run start:dev
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+### Testing
 
 ```bash
-$ pnpm install -g @nestjs/mau
-$ mau deploy
+# Run unit tests
+pnpm run test
+
+# Run end-to-end tests
+pnpm run test:e2e
+
+# Run tests with coverage
+pnpm run test:cov
+
+# Run tests in watch mode
+pnpm run test:watch
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+### Building for Production
 
-## Resources
+```bash
+# Build all services
+pnpm run build
 
-Check out a few resources that may come in handy when working with NestJS:
+# Start production server
+pnpm run start:prod
+```
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+## 🔐 Environment Variables
 
-## Support
+Create a `.env` file based on `.env.example` with the following variables:
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```
+# Database
+DATABASE_URL=postgresql://user:password@localhost:5432/eventflow
 
-## Stay in touch
+# Kafka
+KAFKA_BROKERS=localhost:9092
+KAFKA_CLIENT_ID=eventflow-app
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+# JWT
+JWT_SECRET=your-secret-key
+JWT_EXPIRES_IN=1h
 
-## License
+# Email (for notifications service)
+SMTP_HOST=smtp.example.com
+SMTP_PORT=587
+SMTP_USER=your-email@example.com
+SMTP_PASS=your-password
+```
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+## 📡 Kafka Topics
+
+The application uses the following Kafka topics for inter-service communication:
+- `user.registered` - New user registration events
+- `user.login` - User login events
+- `event.created` - New event creation
+- `event.updated` - Event updates
+- `ticket.purchased` - Ticket purchase events
+- `ticket.checked-in` - Ticket validation events
+- `event.cancelled` - Event cancellation notifications
+
+## 🛠️ Technology Stack
+
+- **Framework**: NestJS v11
+- **Language**: TypeScript v5
+- **Database**: PostgreSQL with Drizzle ORM
+- **Messaging**: Apache Kafka with @nestjs/microservices
+- **Authentication**: JWT with Passport.js
+- **Validation**: class-validator & class-transformer
+- **Testing**: Jest
+- **Code Quality**: ESLint, Prettier
+- **Package Manager**: pnpm
+
+## 📁 Key Files
+
+- `nest-cli.json` - NestJS CLI configuration for monorepo
+- `package.json` - Project dependencies and scripts
+- `libs/database/src/schema/` - Database table schemas
+- `libs/kafka/src/constants/` - Kafka topic and service definitions
+- `apps/*/src/` - Individual service implementations
+
